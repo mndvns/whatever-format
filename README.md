@@ -9,7 +9,7 @@
 
   Decode the yaml/ini/json `string` into a nested object.
 
-### readFile(path, callback)
+### readFile(path, fn)
 
   Read file at `path` and call `fn` with decoded data.
 
