@@ -10,27 +10,68 @@ var debug = require('debug')('whatever:test');
 // clear screen
 process.stdout.write('\u001B[2J');
 
-describe('whatever.decode', function(){
+describe('whatever', function(){
 
-  it('should decode ini strings', function(done){
-    decode('ini', done);
+  describe('decode', function(){
+    it('should decode ini strings', function(done){
+      decode('ini', done);
+    });
+
+    it('should decode yaml strings', function(done){
+      decode('yaml', done);
+    });
+
+    it('should decode json strings', function(done){
+      decode('json', done);
+    });
   });
 
-  it('should decode yaml strings', function(done){
-    decode('yaml', done);
+  describe('readFile', function(){
+    it('should decode ini files', function(done){
+      whatever.readFile('./test/fixtures/test.ini', function(err, data) {
+        if (err) return done(err);
+        decode('ini', done);
+      });
+    });
+
+    it('should decode yaml files', function(done){
+      whatever.readFile('./test/fixtures/test.yaml', function(err, data) {
+        if (err) return done(err);
+        decode('yaml', done);
+      });
+    });
+
+    it('should decode json files', function(done){
+      whatever.readFile('./test/fixtures/test.json', function(err, data) {
+        if (err) return done(err);
+        decode('json', done);
+      });
+    });
   });
 
-  it('should decode json strings', function(done){
-    decode('json', done);
+  describe('readFileSync', function(){
+    it('should decode ini files synchronously', function(done){
+      var data = whatever.readFileSync('./test/fixtures/test.ini');
+      test(data, done);
+    });
+
+    it('should decode yaml files synchronously', function(done){
+      var data = whatever.readFileSync('./test/fixtures/test.yaml');
+      test(data, done);
+    });
+
+    it('should decode json files synchronously', function(done){
+      var data = whatever.readFileSync('./test/fixtures/test.json');
+      test(data, done);
+    });
   });
 
 });
 
 /**
- * Decode file at `path`
+ * Decode file with `format`
  *
  * @param {String} format
- * @param {String} path
  * @param {Function} callback
  */
 
@@ -39,13 +80,24 @@ function decode (format, callback) {
     if (err) return callback(err);
     var output = whatever.decode(rawdata);
     debug(format + ' output', output);
-    output.should.be.an.object;
-    output.should.have.properties('user', 'password', 'section');
-    output.user.should.equal('dbuser');
-    output.password.should.equal('dbpassword');
-    output.section.should.have.properties('database');
-    output.section.database.should.have.properties('user');
-    output.section.database.user.should.equal('nesteduser');
-    callback();
+    test(output, callback);
   });
+}
+
+/**
+ * Test that `data` is consistent
+ *
+ * @param {Object} data
+ * @param {Function} callback
+ */
+
+function test (data, callback) {
+  data.should.be.an.object;
+  data.should.have.properties('user', 'password', 'section');
+  data.user.should.equal('dbuser');
+  data.password.should.equal('dbpassword');
+  data.section.should.have.properties('database');
+  data.section.database.should.have.properties('user');
+  data.section.database.user.should.equal('nesteduser');
+  callback();
 }
