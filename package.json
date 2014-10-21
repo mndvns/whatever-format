@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "ini": "^1.2.1",
-    "js-yaml": "^3.1.0"
+    "js-yaml": "^3.1.0",
+    "debug": "^1.0.4"
   },
   "devDependencies": {
     "debug": "^1.0.4",
