@@ -92,8 +92,12 @@ function decode (format, callback) {
  */
 
 function test (data, callback) {
-  data.should.be.an.object;
+  data.should.be.an.Object();
   data.should.have.properties('user', 'password', 'section');
+  data.integer.should.equal(10);
+  data.float.should.equal(1.1);
+  data.is_true.should.equal(true);
+  data.is_false.should.equal(false);
   data.user.should.equal('dbuser');
   data.password.should.equal('dbpassword');
   data.section.should.have.properties('database');

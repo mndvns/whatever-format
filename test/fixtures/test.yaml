@@ -1,5 +1,9 @@
 user: "dbuser"
 password: "dbpassword"
+integer: 10
+float: 1.1
+is_true: true
+is_false: false
 section:
   database:
     user: "nesteduser"
