@@ -2,7 +2,7 @@
   "name": "whatever-format",
   "description": "Liberally accept file formats",
   "repository": "git://github.com/mndvns/whatever-format.git <mail@mndvns.com>",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
