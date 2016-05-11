@@ -5,7 +5,7 @@
 var should = require('should');
 var fs = require('fs');
 var whatever = require('..');
-var debug = require('debug')('whatever:test');
+var debug = require('debug')('whatever-format:test');
 
 // clear screen
 process.stdout.write('\u001B[2J');
@@ -66,6 +66,14 @@ describe('whatever', function(){
     });
   });
 
+  describe('format', function() {
+    it('should throw if format is declared and fails', function() {
+      decode('ini', {format: 'json'}, err => {
+        err.should.be.an.Error();
+      });
+    });
+  });
+
 });
 
 /**
@@ -75,10 +83,18 @@ describe('whatever', function(){
  * @param {Function} callback
  */
 
-function decode (format, callback) {
+function decode(format, opts, callback) {
+  if (typeof opts === 'function') {
+    callback = opts;
+    opts = {};
+  }
   fs.readFile('./test/fixtures/test.' + format, 'utf8', function(err, rawdata){
     if (err) return callback(err);
-    var output = whatever.decode(rawdata);
+    try {
+      var output = whatever(rawdata, opts);
+    } catch(e) {
+      return callback(e);
+    }
     debug(format + ' output', output);
     test(output, callback);
   });
